@@ -2,6 +2,8 @@ const User = require("../models/user");
 const multer = require("multer");
 const path = require("path");
 const { uuidv4 } = require("uuid");
+const {uploadOnCloudnary} = require("../utils/cloudnary");
+
 
 const getAllUsers = async (req, res) => {
   //get all users from the database
@@ -13,7 +15,7 @@ const getAllUsers = async (req, res) => {
             name: user.name,
             email: user.email,
             about: user.about,
-            image: `${user.image}`,
+            image: user.image,
         };
         })
 
@@ -36,12 +38,16 @@ const addUser = async (req, res) => {
     if (!profileImage) {
       return res.status(400).send("No file uploaded.");
     }
+    //file path
+    const filePath = path.join(__dirname, "..", "public","uploads", profileImage.filename);
 
-    const imageUrl = `http://localhost:3000/public/uploads/${profileImage.filename}`;
+    const cloudinaryResponse = await uploadOnCloudnary(filePath);
+    if (!cloudinaryResponse) {
+      return res.status(500).send("Cloudnary upload failed");
+    }
 
-
-    // Save the data to a database (e.g., MongoDB)
-    // Example: Save name, email, and imageUrl to MongoDB
+    const imageUrl = cloudinaryResponse.secure_url;
+    
     console.log({ name, email, imageUrl });
 
     const user = await User.create({email, name, about, image: imageUrl});
@@ -50,7 +56,7 @@ const addUser = async (req, res) => {
     res.json({ success: true, msg: "User added successfully" });
 
   } catch (error) {
-    res.status(500).json({ success: false, msg: error });
+    res.status(500).json({ success: false, msg: error.message });
   }
 };
 
