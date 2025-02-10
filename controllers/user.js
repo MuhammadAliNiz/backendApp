@@ -2,7 +2,7 @@ const User = require("../models/user");
 const multer = require("multer");
 const path = require("path");
 const { uuidv4 } = require("uuid");
-const {uploadOnCloudnary} = require("../utils/cloudnary");
+const {uploadOnCloudnary, deleteOnCloudnary} = require("../utils/cloudnary");
 
 
 const getAllUsers = async (req, res) => {
@@ -47,10 +47,11 @@ const addUser = async (req, res) => {
     }
 
     const imageUrl = cloudinaryResponse.secure_url;
+    const imageName = cloudinaryResponse.public_id;
     
-    console.log({ name, email, imageUrl });
+    console.log({ name, email, imageUrl, imgname: imageName });
 
-    const user = await User.create({email, name, about, image: imageUrl});
+    const user = await User.create({email, name, about, image: imageUrl, imgname: imageName});
     await user.save();
 
     res.json({ success: true, msg: "User added successfully" });
@@ -60,7 +61,36 @@ const addUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+          return res.status(404).json({ success: false, msg: "User not found" });
+        }
+
+        const imageName = user.imgname
+        const cloudinaryResponse = await deleteOnCloudnary(imageName);
+
+        if (!cloudinaryResponse) {
+          return res.status(500).send("Cloudnary delete failed");
+        }
+
+        const userResponse =await user.deleteOne({ _id: id });
+        if (!userResponse) {
+          return res.status(500).json({ success: false, msg: "User delete failed" });
+        }
+        res.status(200).json({ success: true, msg: "User deleted successfully" });
+
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ success: false, msg: error.message });
+    }
+}
+
 module.exports = {
   getAllUsers,
   addUser,
+  deleteUser
 };

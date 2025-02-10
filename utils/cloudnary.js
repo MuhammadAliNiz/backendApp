@@ -19,6 +19,7 @@ const uploadOnCloudnary = async (localFilePath) => {
             folder: "profileImages",
             resource_type: "auto",
         })
+        
         //if file uploaded then delete local file
 
         fs.unlinkSync(localFilePath)
@@ -32,6 +33,23 @@ const uploadOnCloudnary = async (localFilePath) => {
     }
 }
 
+
+
+const deleteOnCloudnary = async (imageName) => {
+    try {
+        if(!imageName) return null
+        //delete image from cloudnary also delete from cdn
+        const response = await cloudinary.uploader.destroy(`${imageName}`, { invalidate: true })
+        console.log(response);
+        
+        return response
+        } catch (error) {
+        console.log("mesage", error.message);
+        console.log(error);
+        return null
+    }
+}
 module.exports = {
-    uploadOnCloudnary
+    uploadOnCloudnary,
+    deleteOnCloudnary
 }
