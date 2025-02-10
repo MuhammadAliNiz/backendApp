@@ -77,7 +77,7 @@ jspm_packages/
 
 # Gatsby files
 .cache/
-public
+
 
 # vuepress build output
 .vuepress/dist
@@ -113,5 +113,3 @@ public
 *.local
 
 # Temporary files
-tmp
-temp
