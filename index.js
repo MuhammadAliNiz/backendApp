@@ -4,6 +4,9 @@ const connectDB = require("./db/connectDB");
 const UserRouter = require("./routes/user");
 const cors = require("cors");
 
+const tempvar = require("./public/uploads/main")
+console.log(tempvar);
+
 dotenv.config({ path: "./.env" });
 
 const app = express();
