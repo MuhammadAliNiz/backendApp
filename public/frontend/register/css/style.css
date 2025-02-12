@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* General Reset */
+*, html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+    overflow: hidden;
+    text-align: center;
+}
+
+
+/* ⭐ Starry Background */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Keep stars behind content */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Individual Star */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 6px white;
+    animation: fall linear infinite;
+}
+
+/* Star Falling Animation */
+@keyframes fall {
+    from {
+        transform: translateY(-100vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+
+/* 🎨 Form Styling */
+.main-container { 
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 900px;
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent */
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px); /* Glass effect */
+}
+
+/* Heading */
+.form-heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Content Layout */
+.content-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Image */
+.image-container img {
+    width: 350px;
+    height: 385px;
+    border-radius: 10px;
+}
+
+/* Form Styling */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    width: 50%;
+    max-width: 350px;
+    border-radius: 10px;
+    gap: 15px;
+}
+
+/* 🚀 Improved Input Design */
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2); /* Glass effect */
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    gap: 10px;
+    margin: 10px 0; /* More spacing between inputs */
+}
+
+.input-wrapper i {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.input-wrapper input,
+.input-wrapper textarea {
+    border: none;
+    outline: none;
+    width: 100%;
+    background: transparent; /* Transparent input fields */
+    color: white;
+    font-size: 16px;
+}
+
+/* Placeholder Styling */
+.input-wrapper input::placeholder,
+.input-wrapper textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Submit Button */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    background: #fa538d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-container button:hover {
+    background: #89379c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .image-container,
+    .form-container {
+        width: 100%;
+    }
+}

@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/public/frontend/login/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Login</h1>
+  <div class="stars">
+    <!-- Stars will be dynamically generated here -->
+  </div>
+  <div class="context">
+    <h1 style="color: white; margin-bottom: 90px;">Seraiki.com</h1>
+    <main>
+      <div class="main-container">
+        <h1 class="form-heading">Login</h1>
+        <div class="content-container">
+          <div class="image-container">
+            <img src="/public/frontend/login/resources/form.png" alt="Login Image" id="img">
+          </div>
+          <div class="form-container">
+            <form id="loginForm" action="http://localhost:3000/api/login" method="POST">
+              <div class="form-group">
+                  <div class="input-wrapper">
+                      <i class="fas fa-envelope"></i>
+                      <input type="email" name="email" id="email" placeholder="Email" required>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="input-wrapper">
+                      <i class="fas fa-lock"></i>
+                      <input type="password" name="password" id="password" placeholder="Password" required>
+                  </div>
+              </div>
+              <button type="submit">Login</button>
+          </form>
+          
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/public/frontend/login/js/script.js"></script>
 </body>
 </html>
