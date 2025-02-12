@@ -21,7 +21,6 @@ const uploadOnCloudnary = async (localFilePath) => {
         })
         
         //if file uploaded then delete local file
-
         fs.unlinkSync(localFilePath)
         
         return response

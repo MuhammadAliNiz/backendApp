@@ -1,9 +1,20 @@
-const UserRouter = require('express').Router();
-const {getAllUsers, addUser, deleteUser} = require('../../controllers/api/user');
-const multerUpload = require('../../utils/multer');
+const ApiRouter = require("express").Router();
+const {
+  login,
+  register,
+  getAllUsers,
+  addUser,
+  deleteUser,
+} = require("../../controllers/api/user");
+const multerUpload = require("../../utils/multer");
 
-UserRouter.get("/", getAllUsers)
-UserRouter.post("/",multerUpload.single('profileImage'), addUser)
-UserRouter.delete("/:id", deleteUser)
+//Auth routes
+ApiRouter.post("/login", login);
+ApiRouter.post("/register", multerUpload.single("profileImage"), register);
 
-module.exports = UserRouter;
+
+ApiRouter.get("/", getAllUsers);
+ApiRouter.post("/", multerUpload.single("profileImage"), addUser);
+ApiRouter.delete("/:id", deleteUser);
+
+module.exports = ApiRouter;

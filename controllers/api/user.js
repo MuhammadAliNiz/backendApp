@@ -1,8 +1,97 @@
 const User = require("../../models/user");
-const multer = require("multer");
 const path = require("path");
-const { uuidv4 } = require("uuid");
 const {uploadOnCloudnary, deleteOnCloudnary} = require("../../utils/cloudnary");
+const bcryptjs = require("bcryptjs");
+const generateTokenAndCookies = require("../../utils/generateTokenAndCookies");
+
+
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+    if (!email || !password) {
+      return res.status(400).json({success: false, msg: "Please enter all fields" });
+    }
+
+    const user = await User.findOne({email: email})
+    if(!user) {
+      return res.status(404).json({success: false, msg: "User not found" });
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({success: false, msg: "Invalid credentials" });
+    }
+
+    generateTokenAndCookies(res, user._id);
+
+    return res.redirect("/showTasks");
+
+}catch (error) {
+  res.status(500).json({success: false, msg: error });
+}
+}
+
+
+const register = async (req, res) => {
+  try{
+  const { name, email, password } = req.body;
+  const profileImage = req.file;
+  console.log(req.file)
+  if (!name || !email || !password || !profileImage) {
+    return res.status(400).json({success: false, msg: "Please enter all fields" });
+  }
+
+  const user = await User.findOne({
+    email: email,
+  });
+
+  if (user) {
+    return res.status(400).json({success: false, msg: "User already"});
+  }
+
+  const hashPassword = await bcryptjs.hash(password, 10);
+
+  const filePath = path.join(__dirname, "..","..", "public","temp", profileImage.filename);
+  const cloudinaryResponse = await uploadOnCloudnary(filePath);
+  if (!cloudinaryResponse) {
+    return res.status(500).send("Cloudnary upload failed");
+  }
+
+  const imageUrl = cloudinaryResponse.secure_url;
+  const imageName = cloudinaryResponse.public_id;
+
+  if(process.env.NODE_ENV == "development") {
+    console.log({ name, email,hashPassword , imageUrl });
+  }
+
+  const newUser = new User({
+    name,
+    email,
+    password: hashPassword,
+    image: imageUrl,
+    imgname: imageName,
+  });
+  await newUser.save();
+
+  generateTokenAndCookies(res, newUser._id);
+
+  res.json({success: true, msg: "User registered successfully" });
+  //return res.redirect("/showTasks");
+
+}catch (error) {
+  console.log(error);
+  res.status(500).json({success: false, msg: error });
+}
+}
+
+
+
+
+
+
+
+
 
 
 const getAllUsers = async (req, res) => {
@@ -89,8 +178,5 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = {
-  getAllUsers,
-  addUser,
-  deleteUser
-};
+
+module.exports = { login, register, getAllUsers, addUser, deleteUser };
