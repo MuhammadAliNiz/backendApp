@@ -1,8 +1,8 @@
-const User = require("../models/user");
+const User = require("../../models/user");
 const multer = require("multer");
 const path = require("path");
 const { uuidv4 } = require("uuid");
-const {uploadOnCloudnary, deleteOnCloudnary} = require("../utils/cloudnary");
+const {uploadOnCloudnary, deleteOnCloudnary} = require("../../utils/cloudnary");
 
 
 const getAllUsers = async (req, res) => {
